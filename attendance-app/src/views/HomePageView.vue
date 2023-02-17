@@ -8,9 +8,34 @@ export default {
   data() {
     return {
       zoom: 17,
+      user_lat: -6.220550360858781,
+      user_long: 106.80993581216246,
     };
   },
   components: { Navbar, Profile, LMap, LTileLayer, LMarker },
+  methods: {
+    getLocation() {
+      console.log("first");
+      setTimeout(() => {
+        navigator.geolocation.getCurrentPosition(
+          this.success,
+          this.errorPosition
+        );
+      }, 200);
+    },
+    success(position) {
+      const { latitude, longitude } = position.coords;
+      this.user_lat = latitude;
+      this.user_long = longitude;
+    },
+
+    errorPosition(err) {
+      console.log(err);
+    },
+  },
+  created() {
+    this.getLocation();
+  },
 };
 </script>
 <template>
@@ -22,13 +47,13 @@ export default {
       <p>Fri, 17 Feb 2023</p>
       <div class="d-flex flex-column gap-5">
         <div class="card" style="height: 340px; width: 340px">
-          <LMap ref="map" v-model:zoom="zoom" :center="[-6.2264, 106.8112]">
+          <LMap ref="map" v-model:zoom="zoom" :center="[user_lat, user_long]">
             <LTileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               layer-type="base"
               name="OpenStreetMap"
             ></LTileLayer>
-            <LMarker :lat-lng="[-6.2264, 106.8112]"></LMarker>
+            <LMarker :lat-lng="[user_lat, user_long]"></LMarker>
           </LMap>
         </div>
         <button
