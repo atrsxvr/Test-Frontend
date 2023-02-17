@@ -15,11 +15,10 @@ export default {
   components: { Navbar, Profile, LMap, LTileLayer, LMarker },
   methods: {
     getLocation() {
-      console.log("first");
       setTimeout(() => {
         navigator.geolocation.getCurrentPosition(
           this.success,
-          this.errorPosition
+          this.errorPosition, {enableHighAccuracy: true}
         );
       }, 200);
     },
